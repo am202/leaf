@@ -40,6 +40,19 @@ export default class Tuple extends React.PureComponent<Props> {
         const c = className ? className : 'patientlist';
         const val = this.getValueDisplay();
 
+        if (type === PatientListColumnType.String && val && val.startsWith("http")) {
+            const sep = val.indexOf('|');
+            if (sep > 0) {
+                const url = val.substring(0, sep);
+                const label = val.substring(sep + 1);
+                return (
+                    <td className={`${c}-tuple ${PatientListColumnType[type]}`}>
+                        <a target="_blank" rel="noopener noreferrer" href={url}>{label}</a>
+                    </td>
+                )
+            }
+        }
+
         return (
             <td className={`${c}-tuple ${PatientListColumnType[type]}`}>
                 {val}
