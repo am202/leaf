@@ -33,8 +33,8 @@ export default class HintContainer extends React.PureComponent<Props> {
                                     className={`${c}-hint-item leaf-dropdown-item ${i === selectedHintIndex ? 'selected' : ''}`} 
                                     key={hint.personId}
                                     >
-                                        <span className={`${c}-hint-name`}>{hint.name} </span>
-                                        <span className={`${c}-hint-mrn`}>{hint.mrn}</span>
+                                        <span className={`${c}-hint-name`}>{hint.name}, </span>
+                                        <span className={`${c}-hint-mrn`}>{hint.birthDate.toLocaleString().substring(0,10)}</span>
                                 </div>
                             </Link>
                         </div>

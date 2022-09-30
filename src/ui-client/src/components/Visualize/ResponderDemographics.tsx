@@ -64,7 +64,7 @@ export default class ResponderDemographics extends React.PureComponent<Props> {
                 </Row>
                 <Row>
                     <Col lg={6} md={12} className="visualization-languagebyheritage-container">
-                        <SectionHeader headerText="Ethnic Heritage by Language" />
+                        <SectionHeader headerText="Diagnosis" />
                         <LanguageByHeritage
                             bucketset={languageByHeritageData} 
                             delay={getDelay()}
@@ -73,7 +73,7 @@ export default class ResponderDemographics extends React.PureComponent<Props> {
                         />
                     </Col>
                     <Col lg={6} md={12} className="visualization-ataglance-container">
-                        <SectionHeader headerText="Religious Beliefs" />
+                        <SectionHeader headerText="Other" />
                         <Religion
                             counts={religionData} 
                             delay={getDelay()}

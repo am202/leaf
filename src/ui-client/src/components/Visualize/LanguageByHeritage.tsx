@@ -6,7 +6,7 @@
  */ 
 
 import React from 'react';
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, LabelList, Tooltip, Legend, LegendPayload } from 'recharts';
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, LabelList, Cell } from 'recharts';
 import { visualizationConfig } from '../../config/visualization';
 import { VariableBucketSet } from '../../models/cohort/DemographicDTO';
 
@@ -23,7 +23,7 @@ interface State {
 }
 
 export class LanguageByHeritage extends React.PureComponent<Props,State> {
-    private className = 'visualization-languagebyheritage';
+    private className = 'visualization-religion';
     private maxWidth = 800;
     private xAxisOffset = 200;
     private defaultDataLength = 20;
@@ -43,22 +43,13 @@ export class LanguageByHeritage extends React.PureComponent<Props,State> {
         const del = useDelay ? delay : 0;
         const c = this.className;
         const w = width > this.maxWidth ? this.maxWidth : width;
-        let data: any[] = Object.entries(bucketset.data.buckets).map(([k,v]) => {
-            let d: any = { label: k, sum: 0 };
-            Object.entries(v.subBuckets).forEach(([sk,sv]) => {
-                d[sk] = sv;
-                d.sum += sv;
-            });
-            return d;
-        }).sort((a,b) => a.sum > b.sum ? 0 : 1);
-        const len = data.length;
-        const sums: LanguageSum[] = Object.entries(bucketset.subBucketTotals).map(([k,v],i) => {
+        let data = Object.entries(bucketset.subBucketTotals).map(([k,v],i) => {
             return {
-                label: k,
-                value: v,
-                color: this.color(i, config.colors)
+                key: k,
+                value: v
             }
-        });
+        }).sort((a,b) => a.value > b.value ? -1 : 1);
+        const len = data.length;
 
         if (!showAll) {
             data = data.slice(0, this.defaultDataLength);
@@ -76,28 +67,15 @@ export class LanguageByHeritage extends React.PureComponent<Props,State> {
                 }
 
                 {/* Chart */}
-                <div style={{ height: height + this.xAxisOffset }}>
+                <div style={{ height }}>
                     <ResponsiveContainer >
-                        <BarChart width={600} data={data} margin={{top: 20, right: 30, left: 20, bottom: 5}}>
-                            <XAxis dataKey="label" interval={0} textAnchor="end" height={this.xAxisOffset} tick={<RotatedXAxisTick />} />
-                            <YAxis domain={[ 0, dataMax => (dataMax * 1.1) ]}/>
-                            <Tooltip />
-                            {sums.map((s,i) => {
-                                return (
-                                    <Bar 
-                                        dataKey={s.label}
-                                        key={s.label}
-                                        stackId="a" 
-                                        animationBegin={del} 
-                                        barSize={config.barSize} 
-                                        fill={s.color}>
-                                        {i === (sums.length-1) &&
-                                        <LabelList dataKey="sum" position="top" formatter={this.formatNumber} />
-                                        }
-                                    </Bar>
-                                    );
-                            })}
-                            <Legend layout="vertical" align="right" verticalAlign="top" content={this.renderLegend.bind(null, sums)} />
+                        <BarChart data={data} margin={{top: 30, right: 30, left: 10, bottom: 5}} layout="vertical" >
+                            <XAxis type="number" />
+                            <YAxis dataKey="key" type="category" interval={0} width={150} />
+                            <Bar animationBegin={del} barSize={config.barSize} dataKey="value" isAnimationActive={true} >
+                                {data.map((d,i) => <Cell key={d.key} fill={this.color(i,config.colors)} />)}
+                                <LabelList dataKey="value" formatter={this.formatNumber} position="right"/>
+                            </Bar>
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -106,23 +84,6 @@ export class LanguageByHeritage extends React.PureComponent<Props,State> {
     }
 
     private formatNumber = (val: any) => val.toLocaleString();
-
-    private renderLegend = (sums: LanguageSum[]) => {
-        const sorted = sums.sort((a,b) => a.value === b.value ? 0 : a.value > b.value ? 0 : 1).slice(0,10);
-        return (
-            <div className="visualization-legend">
-               {sorted.map((s) => {
-               return (
-                <div className="visualization-legend-row" key={s.label}>
-                    <div className="visualization-legend-square" style={{ backgroundColor: s.color }}/>
-                    <div className="visualization-legend-label">{s.label}</div>
-                    <div className="visualization-legend-divider">-</div>
-                    <div className="visualization-legend-value">{s.value.toLocaleString()}</div>
-                </div>
-               )})}
-            </div>
-        )
-    }
 
     private color = (i: number, colors: string[]): string => {
         const last = colors.length-1;
@@ -134,33 +95,5 @@ export class LanguageByHeritage extends React.PureComponent<Props,State> {
 
     private handleShowAllToggleClick = (showAll: boolean) => {
         this.setState({ showAll, useDelay: false });
-    }
-}
-
-interface LanguageSum {
-    label: string;
-    value: number;
-    color: string;
-}
-
-interface XAxisProps {
-    x?: number;
-    y?: number;
-    stroke?: string;
-    payload?: Payload;
-}
-
-interface Payload {
-    value: any;
-}
-
-class RotatedXAxisTick extends React.PureComponent<XAxisProps> {
-    render() {
-      const { x, y, payload } = this.props;
-      return (
-        <g transform={`translate(${x},${y})`}>
-            <text x={0} y={-16} dy={20} textAnchor="end" transform="rotate(-35)">{payload!.value}</text>
-        </g>
-        );
     }
 }

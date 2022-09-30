@@ -205,8 +205,8 @@ export default class PatientSearchEngineWebWorker {
              */
             for (let i = 0; i < patients!.length; i++) {
                 const patient = patients![i];
-                const tokens: string[] = (patient.name + ' ' + patient.mrn)
-                    .replace(',',' ').split(' ')
+                const tokens: string[] = (patient.name + ", " + patient.birthDate.toLocaleString().substring(0,10))
+                    .split(' ')
                     .map(t => t.trim().toLowerCase())
                     .filter(t => t.length > 0)
                 const indexed: IndexedDemographicRow = { patient, tokens };

@@ -274,7 +274,7 @@ export default class DynamicTimeline extends React.Component<Props, State> {
     private getDateBounds = (vals: TimelineValueSet[]): [number,number] => {
         const absmin = moment().subtract(5, 'years').valueOf();
         let min = moment(new Date()).valueOf();
-        let max = min;
+        let max = absmin;
         for (const v of vals) {
             const { meta, data } = v;
             const cols = getDatasetMetadataColumns(meta);
@@ -290,11 +290,12 @@ export default class DynamicTimeline extends React.Component<Props, State> {
                 }
             }
         }
-        
-        if (min < absmin) { min = absmin; }
-        max = moment().add(6, 'month').valueOf();
 
-        return [ min * 0.999, max * 0.995 ];
+        if (max < min) {
+            max = min;
+        }
+
+        return [ min * 0.999, max * 1.005 ];
     }
 
     private getValueSets = (): [ TimelineValueSet[], TimelineValueSet[] ] => {

@@ -42,7 +42,7 @@ export class Religion extends React.PureComponent<Props,State> {
         const c = this.className;
         const del = useDelay ? delay : 0;
         const w = width > this.maxWidth ? this.maxWidth : width;
-        let data = Object.entries(counts).map(([key,value]) => ({ key, value }) ).sort((a,b) => a.value > b.value ? 0 : 1);
+        let data = Object.entries(counts).map(([key,value]) => ({ key, value }) ).sort((a,b) => a.value > b.value ? -1 : 1);
         const len = data.length;
 
         if (!showAll) {

@@ -65,6 +65,7 @@ class Header extends React.Component<Props> {
         const { connectDragSource, connectDropTarget, connectDragPreview, data, onClick, isOver, canDrop, isDragging, sort, className } = this.props;
         const c = className ? className : 'patientlist';
         const classes = [ `${c}-column-header` ];
+        const displayName = this.props.data.displayName === 'Mrn' ? 'Dx Date' : (this.props.data.displayName === 'Language' ? 'Diagnosis' : (this.props.data.displayName === 'Name' ? 'Subject ID' : (this.props.data.displayName === 'Religion' ? 'Other' : this.props.data.displayName)));
 
         if (isOver && canDrop) { classes.push('can-drop'); }
         if (isDragging)        { classes.push('is-dragging'); }
@@ -81,7 +82,7 @@ class Header extends React.Component<Props> {
                 <th 
                     className={classes.join(' ')}
                     onClick={onClick.bind(null, data.index)}>
-                    {this.props.data.displayName}
+                    {displayName}
                 </th>
             )))
         )

@@ -71,10 +71,10 @@ export default class DynamicList extends React.Component<Props> {
     private getItems = (): JSX.Element | null => {
         const { config, cohort, patient } = this.props;
         const meta = cohort.metadata.get(config.datasetId);
-        const data = patient.datasets.get(config.datasetId);
+        let data = patient.datasets.get(config.datasetId);
         const c = this.className;
 
-        if (!meta || !data) { return null; }
+        if (!meta || !data || (data.length == 0)) { return null; }
 
         const cols = getDatasetMetadataColumns(meta!);
         const containerClass = `${c}-item-container`;
@@ -82,7 +82,13 @@ export default class DynamicList extends React.Component<Props> {
         const dateClass = `${c}-item-date`;
         const datediffClass = `${c}-item-datediff`;
         const parenClass = `${c}-item-paren`;
-        
+
+        const firstDate = (data[0][cols.fieldDate!] as any) as Date;
+        const lastDate = (data[data.length - 1][cols.fieldDate!] as any) as Date;
+        if (firstDate && lastDate && (firstDate.getTime() < lastDate.getTime())) {
+            data = data.reverse();
+        }
+
         return (
             <div>
                 {data.map((d, i) => {
@@ -94,7 +100,7 @@ export default class DynamicList extends React.Component<Props> {
                     if (date) {
                         const now = moment(new Date());
                         const then = moment(date);
-                        dateStr = then.format('MMM YYYY');
+                        dateStr = then.format('MM-DD-YYYY');
 
                         for (const pair of [['years','yr'],['months','mo'],['days','dy']]) {
                             const [ unit, abbr ] = pair;

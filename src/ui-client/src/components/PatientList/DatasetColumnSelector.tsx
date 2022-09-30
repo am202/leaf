@@ -84,7 +84,7 @@ export default class DatasetColumnSelector extends React.PureComponent<Props, St
                             {cols.map((col: PatientListColumn) => (
                                 <Row className={cs} key={col.id}>
                                     <Col md={8}>
-                                        <div className={`${c}-name`}>{col.displayName}</div>
+                                        <div className={`${c}-name`}>{col.displayName === 'Mrn' ? 'Dx Date' : (col.displayName === 'Language' ? 'Diagnosis' : (col.displayName === 'Name' ? 'Subject ID' : (col.displayName === 'Religion' ? 'Other' : col.displayName)))}</div>
                                     </Col>
                                     <Col md={4}>
                                         <CheckBoxSlider checked={col.isDisplayed} onClick={this.handleColumnClick.bind(null, col)} />

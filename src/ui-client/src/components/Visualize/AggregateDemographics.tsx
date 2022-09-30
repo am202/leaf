@@ -52,8 +52,8 @@ export default class AggregateDemographics extends React.PureComponent<Props> {
                     </Col>
                 </Row>
                 <Row>
-                    <Col lg={6} md={12} className="visualization-languagebyheritage-container">
-                        <SectionHeader headerText="Ethnic Heritage by Language" />
+                    <Col lg={6} md={12} className="visualization-ataglance-container">
+                        <SectionHeader headerText="Diagnosis" />
                         <LanguageByHeritage 
                             bucketset={languageByHeritageData} 
                             delay={getDelay(2)}
@@ -62,7 +62,7 @@ export default class AggregateDemographics extends React.PureComponent<Props> {
                         />
                     </Col>
                     <Col lg={6} md={12} className="visualization-ataglance-container">
-                        <SectionHeader headerText="Religious Beliefs" />
+                        <SectionHeader headerText="Other" />
                         <Religion
                             counts={religionData} 
                             delay={getDelay(3)}
