@@ -112,7 +112,7 @@ var reindexCache = function (payload) {
      */
     for (var i = 0; i < patients.length; i++) {
         var patient = patients[i];
-        var tokens = (patient.name + ", " + patient.birthDate.toLocaleString().substring(0,10))
+        var tokens = (patient.name + ", " + patient.birthDate?.toLocaleString?.().substring(0,10))
             .split(' ')
             .map(function (t) { return t.trim().toLowerCase(); })
             .filter(function (t) { return t.length > 0; });

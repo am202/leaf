@@ -35,9 +35,9 @@ class PatientHeaderBar extends React.Component<Props> {
                         <div className={`${c}-name`}><span>{d.name}</span></div>
                         <div className={`${c}-separator`} />
                         <div className={`${c}-age`}><span>{d.age} years old, </span></div>
-                        <div className={`${c}-age`}><span>DOB: {d.birthDate.toLocaleString().substring(0,10)}, </span></div>
+                        <div className={`${c}-age`}><span>DOB: {d.birthDate?.toLocaleString?.().substring(0,10)}, </span></div>
                         {d.isDeceased &&
-                        <div className={`${c}-age`}><span>deceased {d.deceasedDateTime?.toLocaleString().substring(0,10)}, </span></div>
+                        <div className={`${c}-age`}><span>deceased {d.deceasedDateTime?.toLocaleString?.().substring(0,10)}, </span></div>
                         }
                         <div className={`${c}-gender`}><span>{d.gender}</span></div>
                     </Col>

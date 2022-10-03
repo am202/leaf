@@ -34,7 +34,7 @@ export default class HintContainer extends React.PureComponent<Props> {
                                     key={hint.personId}
                                     >
                                         <span className={`${c}-hint-name`}>{hint.name}, </span>
-                                        <span className={`${c}-hint-mrn`}>{hint.birthDate.toLocaleString().substring(0,10)}</span>
+                                        <span className={`${c}-hint-mrn`}>{hint.birthDate?.toLocaleString?.().substring(0,10)}</span>
                                 </div>
                             </Link>
                         </div>
