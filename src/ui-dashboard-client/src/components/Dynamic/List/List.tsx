@@ -80,6 +80,8 @@ export default class DynamicList extends React.Component<Props> {
         const containerClass = `${c}-item-container`;
         const valClass = `${c}-item-value`;
         const dateClass = `${c}-item-date`;
+        const valFirstClass = `${c}-item-value-first`;
+        const valMoreClass = `${c}-item-value-more`;
         const datediffClass = `${c}-item-datediff`;
         const parenClass = `${c}-item-paren`;
 
@@ -87,6 +89,16 @@ export default class DynamicList extends React.Component<Props> {
         const lastDate = (data[data.length - 1][cols.fieldDate!] as any) as Date;
         if (firstDate && lastDate && (firstDate.getTime() < lastDate.getTime())) {
             data = data.reverse();
+        }
+        
+        const firstVal = data[0][cols.fieldValueString!];
+        const extraColumn = (firstVal && (firstVal.indexOf("|||") >= 0));
+        let endDateColumn = false;
+        if (extraColumn) {
+            const firstVal2 = firstVal.substring(firstVal.indexOf("|||") + 3);
+            if (firstVal2.startsWith("endDate:")) {
+                endDateColumn = true;
+            }
         }
 
         return (
@@ -112,6 +124,57 @@ export default class DynamicList extends React.Component<Props> {
                         }
                     }
                     
+                    if (endDateColumn) {
+                        const delim = val.indexOf("|||");
+                        let val1 = '';
+                        let val2 = '';
+                        if (delim < 0) {
+                            val1 = val;
+                        } else {
+                            val1 = val.substring(0, delim);
+                            val2 = val.substring(delim + 3);
+                            if (val2.startsWith("endDate:")) {
+                                val2 = val2.substring(8);
+                            }
+                        }
+                        return (
+                            <Row key={i} className={containerClass}>
+                                <Col className={valFirstClass}>
+                                    <span>{val1}</span>
+                                </Col>
+                                <Col className={valMoreClass}>
+                                    <span>{dateStr}</span>
+                                </Col>
+                                <Col className={valMoreClass}>
+                                    <span>{val2}</span>
+                                </Col>
+                            </Row>
+                        );
+                    } else if (extraColumn) {
+                        const delim = val.indexOf("|||");
+                        let val1 = '';
+                        let val2 = '';
+                        if (delim < 0) {
+                            val1 = val;
+                        } else {
+                            val1 = val.substring(0, delim);
+                            val2 = val.substring(delim + 3);
+                        }
+                        return (
+                            <Row key={i} className={containerClass}>
+                                <Col className={valFirstClass}>
+                                    <span>{val1}</span>
+                                </Col>
+                                <Col className={valMoreClass}>
+                                    <span>{val2}</span>
+                                </Col>
+                                <Col className={valMoreClass}>
+                                    <span>{dateStr}</span>
+                                </Col>
+                            </Row>
+                        );
+                    }
+                    
                     return (
                         <Row key={i} className={containerClass}>
                             <Col md={6} className={valClass}>
@@ -119,9 +182,6 @@ export default class DynamicList extends React.Component<Props> {
                             </Col>
                             <Col md={6} className={dateClass}>
                                 <span>{dateStr}</span>
-                                <span className={parenClass}> (</span>
-                                <span className={datediffClass}>{diffStr}</span>
-                                <span className={parenClass}>)</span>
                             </Col>
                         </Row>
                     );

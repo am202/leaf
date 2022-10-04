@@ -129,27 +129,19 @@ export default class DynamicTimeline extends React.Component<Props, State> {
                         <AiOutlineCloudDownload />
                         <span>Export</span>
                     </div>}
-
-                    {/* Comparison to cohort */}
-                    {config.comparison.enabled && config.comparison.filters &&
-                    <DynamicTimelineComparePicker 
-                        config={config} cohort={cohort} patientId={patient.id} filters={filters}
-                        dispatch={dispatch} datasets={numericDatasets} filterClickHandler={this.handleFilterCheckClick}
-                    />
-                    }
                 </div>
 
                 {/* Chart */}
                 <div className={`${c}-chart-container`}>
 
                     {/* Small multiples */}
-                    <div className={`${c}-small-multiples-container`} style={{ width: chartWidth-500 }}>
+                    <div className={`${c}-small-multiples-container`} style={{ width: chartWidth-250 }}>
                         {numericDatasets.map((val, i) => {
                             const { ds, data, cols } = val;
                             const color = this.colors[i];
 
                             return (
-                                <LineChart key={ds.id} width={chartWidth-480} height={swimlaneHeight} margin={margins} data={data}>
+                                <LineChart key={ds.id} width={chartWidth-250} height={swimlaneHeight} margin={margins} data={data}>
 
                                     {/* Grid */}
                                     <CartesianGrid fill={i % 2 === 0 ? 'white' : 'rgb(240,242,245)'} verticalPoints={verticals} />
@@ -157,7 +149,7 @@ export default class DynamicTimeline extends React.Component<Props, State> {
                                     {verticals.map((v, i) => <ReferenceLine key={`v${i}`} x={v} className={`${c}-grid-line`} />)}
 
                                     <XAxis type="number" scale="time" dataKey={dateunix} axisLine={true} tick={true} hide={true} 
-                                        domain={[ bounds[0] * 0.999, bounds[1] * 0.995 ]} ticks={verticals.slice(0, 11)} tickFormatter={(v) => moment(v).format('MM-DD-YYYY') }
+                                        domain={[ bounds[0] * 0.999, bounds[1] * 1.005 ]} ticks={verticals.slice(0, 11)} tickFormatter={(v) => moment(v).format('MM-DD-YYYY') }
                                         allowDataOverflow={true}
                                     />
 
@@ -180,7 +172,7 @@ export default class DynamicTimeline extends React.Component<Props, State> {
 
                         {/* Event timeline on bottom */}
                         {eventDatasets.length > 0 && 
-                        <LineChart width={chartWidth-500} height={swimlaneHeight * 2} margin={margins} data={eventDatasets[0].data}>
+                        <LineChart width={chartWidth-250} height={swimlaneHeight * 2} margin={margins} data={eventDatasets[0].data}>
 
                             {/* Grid */}
                             <CartesianGrid fill={numericDatasets.length % 2 === 0 ? 'white' : 'rgb(240,242,245)'} verticalPoints={verticals} />
@@ -216,7 +208,7 @@ export default class DynamicTimeline extends React.Component<Props, State> {
                             <YAxis type="number" width={0} orientation="right" domain={[0,100]} tick={false} />
 
                             <XAxis type="number" scale="time" dataKey={dateunix} axisLine={true} tick={true} hide={false} 
-                                domain={[ bounds[0] * 0.999, bounds[1] * 0.995]} ticks={verticals.slice(0, 11)} tickFormatter={(v) => moment(v).format('MM-DD-YYYY') }
+                                domain={[ bounds[0] * 0.999, bounds[1] * 1.005]} ticks={verticals.slice(0, 11)} tickFormatter={(v) => moment(v).format('MM-DD-YYYY') }
                                 allowDataOverflow={true}
                             />
 

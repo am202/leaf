@@ -24,39 +24,16 @@ export default class DynamicTimelineTrendBar extends React.Component<Props> {
 
         return (
             <div className={c}>
-                <div className={`${c}-arrow`} style={{ color }}>
-                    {this.getPrimarySymbol()}
-                </div>
                 <div className={`${c}-text-container`}>
-                    {/* Get last value if numeric */}
-                    {isNumeric &&
-                    <div className={`${c}-last-value`} style={{ color }}>
-                        <div>{val}</div>
-                    </div>
-                    }
                     <div className={`${c}-name-container`}>
                         {/* Numeric */}
                         {isNumeric &&
                         <div>
                             <div className={`${c}-name`}>{ds.title}</div>
-                            <div className={`${c}-datediff`}>{this.getDateDiff(date)}</div>
-                        </div>
-                        }
-                        {/* Non-Numeric */}
-                        {!isNumeric &&
-                        <div>
-                            <div className={`${c}-name`}>Latest Social/Health Event</div>
-                            <div className={`${c}-name non-numeric-last`} style={{ color }}>{val}</div>
-                            <div className={`${c}-datediff`}>{this.getDateDiff(date)}</div>
                         </div>
                         }
                     </div>
                 </div>
-                {this.isValid(comparison) && 
-                <div className={`${c}-diff`}>
-                    {this.getComparisonDiff()}
-                </div>
-                }
             </div>
         );
     }
