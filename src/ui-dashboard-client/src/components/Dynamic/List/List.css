@@ -76,32 +76,14 @@
 .dynamic-list-item-value {
     font-size: 1.1rem;
     font-weight: 600;
-    max-width: calc(100% - 125px);
     padding-right: 10px;
     text-align: right;
-    width: 100%;
-}
-
-.dynamic-list-item-date {
-    border-left: 1px solid rgb(210,210,210);
-    margin-left: auto;
-    padding: 0 8px;
-    width: 125px;
-}
-
-.dynamic-list-item-value-first {
-    font-size: 1.1rem;
-    font-weight: 600;
-    padding-right: 10px;
-    text-align: right;
-    width: 34%;
 }
 
 .dynamic-list-item-value-more {
     border-left: 1px solid rgb(210,210,210);
     margin-left: auto;
     padding: 0 8px;
-    width: 33%;
 }
 
 .dynamic-list-item-datediff {

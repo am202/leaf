@@ -28,7 +28,7 @@ export default class DynamicList extends React.Component<Props> {
         if (!meta) { return null; }
 
         return (
-            <Container className={`${c}-container`} style={{ width: `${config.width ?? settings.defaultWidth}%`, color: this.getStyle().color }}>
+            <Container className={`${c}-container`} style={{ "width": `${config.width ?? settings.defaultWidth}%`, color: this.getStyle().color }}>
                 {this.getTitle()}
 
                 <div className={`${c}-inner`} style={this.getStyle()}>
@@ -79,8 +79,7 @@ export default class DynamicList extends React.Component<Props> {
         const cols = getDatasetMetadataColumns(meta!);
         const containerClass = `${c}-item-container`;
         const valClass = `${c}-item-value`;
-        const dateClass = `${c}-item-date`;
-        const valFirstClass = `${c}-item-value-first`;
+        const dateClass = `${c}-item-value-more`;
         const valMoreClass = `${c}-item-value-more`;
         const datediffClass = `${c}-item-datediff`;
         const parenClass = `${c}-item-paren`;
@@ -137,15 +136,36 @@ export default class DynamicList extends React.Component<Props> {
                                 val2 = val2.substring(8);
                             }
                         }
+                        const delim2 = val1.indexOf(":::");
+                        if (delim2 >= 0) {
+                            const val1a = val1.substring(0, delim2);
+                            const val1b = val1.substring(delim2 + 3);
+                            return (
+                                <Row key={i} className={containerClass}>
+                                    <Col className={valClass} md={4}>
+                                        <span>{val1a}</span>
+                                    </Col>
+                                    <Col className={valMoreClass} md={4}>
+                                        <span>{val1b}</span>
+                                    </Col>
+                                    <Col className={dateClass} md={2}>
+                                        <span>{dateStr}</span>
+                                    </Col>
+                                    <Col className={dateClass} md={2}>
+                                        <span>{val2}</span>
+                                    </Col>
+                                </Row>
+                            );
+                        }
                         return (
                             <Row key={i} className={containerClass}>
-                                <Col className={valFirstClass}>
+                                <Col className={valClass} md={8}>
                                     <span>{val1}</span>
                                 </Col>
-                                <Col className={valMoreClass}>
+                                <Col className={dateClass} md={2}>
                                     <span>{dateStr}</span>
                                 </Col>
-                                <Col className={valMoreClass}>
+                                <Col className={dateClass} md={2}>
                                     <span>{val2}</span>
                                 </Col>
                             </Row>
@@ -160,15 +180,36 @@ export default class DynamicList extends React.Component<Props> {
                             val1 = val.substring(0, delim);
                             val2 = val.substring(delim + 3);
                         }
+                        const delim2 = val1.indexOf(":::");
+                        if (delim2 >= 0) {
+                            const val1a = val1.substring(0, delim2);
+                            const val1b = val1.substring(delim2 + 3);
+                            return (
+                                <Row key={i} className={containerClass}>
+                                    <Col className={valClass} md={3}>
+                                        <span>{val1a}</span>
+                                    </Col>
+                                    <Col className={valMoreClass} md={4}>
+                                        <span>{val1b}</span>
+                                    </Col>
+                                    <Col className={valMoreClass} md={3}>
+                                        <span>{val2}</span>
+                                    </Col>
+                                    <Col className={dateClass} md={2}>
+                                        <span>{dateStr}</span>
+                                    </Col>
+                                </Row>
+                            );
+                        }
                         return (
                             <Row key={i} className={containerClass}>
-                                <Col className={valFirstClass}>
+                                <Col className={valClass} md={4}>
                                     <span>{val1}</span>
                                 </Col>
-                                <Col className={valMoreClass}>
+                                <Col className={valMoreClass} md={5}>
                                     <span>{val2}</span>
                                 </Col>
-                                <Col className={valMoreClass}>
+                                <Col className={dateClass} md={3}>
                                     <span>{dateStr}</span>
                                 </Col>
                             </Row>
@@ -177,10 +218,10 @@ export default class DynamicList extends React.Component<Props> {
                     
                     return (
                         <Row key={i} className={containerClass}>
-                            <Col md={6} className={valClass}>
+                            <Col className={valClass} md={8}>
                                 <span>{val}</span>
                             </Col>
-                            <Col md={6} className={dateClass}>
+                            <Col className={dateClass} md={4}>
                                 <span>{dateStr}</span>
                             </Col>
                         </Row>
