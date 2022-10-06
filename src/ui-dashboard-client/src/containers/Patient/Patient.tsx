@@ -1,11 +1,12 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { CohortState, CohortStateType } from '../../models/state/CohortState';
+import { CohortState, CohortStateType, PatientData } from '../../models/state/CohortState';
 import { PatientPageConfig } from '../../models/config/config';
 import PatientHeaderBar from '../../components/Patient/PatientHeaderBar/PatientHeaderBar';
 import { renderDynamicComponent } from '../../utils/dynamic';
 import { getCohortDatasets } from '../../actions/cohort';
 import './Patient.css';
+import { PatientId } from '../../models/patientList/Patient';
 
 interface Props {
     cohortId?: string;
@@ -32,10 +33,21 @@ class Patient extends React.Component<Props> {
 
         // Bail if no data
         if (!cohort || !config || !patientId) { return null; }
-        const patient = cohort.data.patients.get(patientId);
+        var patient: PatientData | undefined;
+        if (patientId.startsWith("subject-")) {
+            const subjectId = patientId.substring(8);
+            cohort.data.patients.forEach((value: PatientData, key: PatientId) => {
+                if (subjectId === value?.demographics?.name) {
+                    patient = value;
+                }
+            });
+        } else {
+            patient = cohort.data.patients.get(patientId);
+        }
 
         // Bail if no patient - TODO(ndobb) should be 404
         if (!patient) { return null; }
+        const thePatient = patient as PatientData;
 
         return (
             <div className={`${c}-container`}>
@@ -45,7 +57,7 @@ class Patient extends React.Component<Props> {
 
                 {/* Dynamically read & render content */}
                 <div className={`${c}-content-container`}>
-                    {config.content.map((content, i) => renderDynamicComponent(content, cohort.data, patient, dispatch, i))}
+                    {config.content.map((content, i) => renderDynamicComponent(content, cohort.data, thePatient, dispatch, i))}
                 </div>
             </div>
         );
