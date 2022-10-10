@@ -33,13 +33,11 @@ class Patient extends React.Component<Props> {
 
         // Bail if no data
         if (!cohort || !config || !patientId) { return null; }
-        var patient: PatientData | undefined;
+        let patient: PatientData | undefined;
         if (patientId.startsWith("subject-")) {
             const subjectId = patientId.substring(8);
-            cohort.data.patients.forEach((value: PatientData, key: PatientId) => {
-                if (subjectId === value?.demographics?.name) {
-                    patient = value;
-                }
+            patient = Array.from(cohort.data.patients.values()).find((value: PatientData) => {
+                return (subjectId === value?.demographics?.name);
             });
         } else {
             patient = cohort.data.patients.get(patientId);
