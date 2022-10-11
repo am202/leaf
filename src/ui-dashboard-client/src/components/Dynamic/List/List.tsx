@@ -99,6 +99,7 @@ export default class DynamicList extends React.Component<Props> {
                 endDateColumn = true;
             }
         }
+        const dateThreshold = new Date(1900, 1, 1).getTime();
 
         return (
             <div>
@@ -108,7 +109,7 @@ export default class DynamicList extends React.Component<Props> {
                     let dateStr = '';
                     let diffStr = '';
 
-                    if (date) {
+                    if (date && (date.getTime() > dateThreshold)) {
                         const now = moment(new Date());
                         const then = moment(date);
                         dateStr = then.format('MM-DD-YYYY');
@@ -121,9 +122,11 @@ export default class DynamicList extends React.Component<Props> {
                                 break;
                             }
                         }
+                    } else {
+                        dateStr = "Unknown";
                     }
                     
-                    if (endDateColumn) {
+                    if (val && endDateColumn) {
                         const delim = val.indexOf("|||");
                         let val1 = '';
                         let val2 = '';
@@ -170,7 +173,7 @@ export default class DynamicList extends React.Component<Props> {
                                 </Col>
                             </Row>
                         );
-                    } else if (extraColumn) {
+                    } else if (val && extraColumn) {
                         const delim = val.indexOf("|||");
                         let val1 = '';
                         let val2 = '';
